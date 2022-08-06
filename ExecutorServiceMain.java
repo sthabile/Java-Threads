@@ -59,5 +59,15 @@ public class ExecutorServiceMain
         }
 
         System.out.println(future_callable.isDone());
+
+        /**
+         * Must shut down the executor service otherwise the program will never exit.
+         * It is important to shut it down in order to free up the resources used by the threads
+         * Resources essentially refers to the CPU & Memory allocated to the threads.
+         * Not sure of a scenario where you would need to free up to do this mid-execution...
+         * It makes more sense to call the shutdown function at the end when all threads have completed.
+         */
+
+        executorService.shutdown();
     }
 }
