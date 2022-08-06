@@ -1,7 +1,4 @@
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class ExecutorServiceMain
 {
@@ -17,7 +14,7 @@ public class ExecutorServiceMain
          * as well as the maximum extra threads in case there are too many tasks for the thread pool to handle without
          * obvious delay
          */
-        ExecutorService executorService = Executors.newSingleThreadExecutor(); //creates pool of one thread
+        ExecutorService executorService = Executors.newFixedThreadPool(1); //creates pool of one thread
 
         /**
          * Using the submit function allows us to submit tasks to be completed in the future
@@ -39,5 +36,28 @@ public class ExecutorServiceMain
             e.printStackTrace();
         }
         System.out.println(future.isDone());
+
+
+        /***
+         * The submit method can also take in a callable instead of a runnable object.
+         * A callable implements the Callable interface which is very similar to the Runnable interface
+         * The Callable interface has a call function which returns an object.
+         * This allows us to obtain the results of task through future.get()
+         */
+        CallableClass myCallableTask = new CallableClass();
+        Future<?> future_callable = executorService.submit(myCallableTask);
+
+        System.out.println(future_callable.isDone());
+
+        try {
+            Object results = future_callable.get();
+            System.out.println(results);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(future_callable.isDone());
     }
 }
